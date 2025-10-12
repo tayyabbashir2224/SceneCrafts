@@ -1,0 +1,89 @@
+SceneCraft Addon for Blender - Elevate Your Architectural Animations
+⚡ Create Stunning Procedural Animations with Ease! ⚡
+SceneCraft is a powerful Blender addon designed to bring dynamic architectural animations to life. Whether you’re working on procedural floor animations, interactive motion effects, or realistic physics-based behaviors, SceneCraft provides an intuitive workflow to animate architectural elements with ease. This addon integrates Geometry Nodes, procedural animations, and customizable presets to streamline your creative process.
+
+With SceneCraft, you can create stunning visual effects such as wave propagation, dynamic floor tiles, randomized motion sequences, and even bounce physics—all without the need for complex manual keyframing. Designed for both beginners and advanced Blender users, SceneCraft is a must-have tool for animators, architects, and designers looking to add realism and motion to their projects.
+
+🎬 See It in Action! 🎬
+👉 (Promo Video Here: Showcase of Features in 30-60 seconds, with different effects in action)
+
+Key Features & Visual Previews
+🏗️ Procedural Floor Animation System
+💡 Animate floor tiles dynamically with 10+ unique presets, including:
+
+Wave Propagation 🌊 (Objects fall in a wavelike motion)
+Spiral & Center Out 🔄 (Beautiful expanding motions)
+Column & Row-Based Falling 🏛️ (Structured, grid-like effects)
+Randomized & Delayed Patterns 🎲 (Natural, unpredictable motion)
+🖼️ (GIF Preview: Showing different floor fall patterns in action)
+🎥 (Video Tutorial: How to apply and tweak floor animations)
+
+🎾 Realistic Bouncing Effect
+Enable dynamic bouncing for a more natural feel!
+Adjust bounce intensity to fine-tune impact physics.
+🖼️ (GIF: Side-by-side comparison of falling tiles with and without bounce enabled)
+🎥 (Video Tutorial: How to enable bounce and adjust settings)
+
+🌀 Curve-Based Animations (Auto-Generated Paths!)
+Animate objects along procedural curves, no manual setup needed!
+Resize curves dynamically to match your scene’s scale.
+Works with tiles, particles, and custom objects.
+🖼️ (GIF: Object following a dynamically generated curve)
+🎥 (Video: Setting up animations using procedural curves)
+
+🎲 Advanced Randomization & Pattern-Based Falling Tiles
+Apply random fall patterns for unique destruction effects.
+Control timing, sequencing, and grouping with precision.
+🖼️ (GIF: Different falling patterns applied to floor tiles)
+🎥 (Video: How to use the pattern-based floor animation system)
+
+🌀 Force Fields & Procedural Growth
+Use force fields to push, pull, or scatter objects dynamically.
+Simulate procedural expansion for futuristic animations.
+🖼️ (GIF: Tiles reacting to a moving force field)
+🎥 (Video: Creating animations with force fields)
+
+🎨 Dynamic Materials & Particle Effects
+Auto-apply materials that change over time!
+Add trails and particle effects to enhance motion.
+🖼️ (GIF: Animated material transitioning over falling tiles)
+🎥 (Video: Applying dynamic materials and particles)
+
+🔊 Sound Integration & Collision Effects (Upcoming!)
+Objects react to collisions with sound effects!
+Trigger audio dynamically based on movement.
+🛠️ (Planned Feature – Stay Tuned!)
+
+Why Choose SceneCraft?
+✅ No complex setups – Works with just a few clicks!
+✅ Fully customizable – Control every aspect of your animations.
+✅ Non-destructive workflow – Apply effects without modifying your original scene.
+✅ Works with Eevee & Cycles – Seamless rendering compatibility.
+✅ Perfect for architects, motion designers, & VFX artists!
+
+How to Use SceneCraft? (Quick Start Guide)
+1️⃣ Install the addon (Blender Preferences → Add-ons → Install)
+2️⃣ Select a floor or object collection
+3️⃣ Choose an animation preset
+4️⃣ Adjust speed, patterns, and physics settings
+5️⃣ Click Apply and watch your scene come to life!
+
+🎥 (Installation & Setup Video: Step-by-step walkthrough on how to install and start using SceneCraft)
+
+Who is This For?
+🎬 Motion Designers - Create mesmerizing animations instantly!
+🏗️ Architects - Showcase building phases dynamically.
+🕹️ Game Developers - Prototype destruction & physics effects.
+📽️ VFX Artists - Add complex motion effects effortlessly.
+
+🎉 Get SceneCraft Now & Level Up Your Animations! 🎉
+📥 Instant Download | 🛠️ Lifetime Updates | 🔥 24/7 Support
+
+Future Updates & Roadmap
+🔜 Sound Triggers & Collision-Based Animations
+🔜 More Material Effects & Custom Shader Support
+🔜 Enhanced Geometry Nodes Integration
+
+This structured listing ensures maximum clarity and engagement while leveraging videos, images, and GIFs for an attractive BlenderMarket page. 🎥🖼️
+
+Would you like me to help create an outline or script for your promo video next? 🚀

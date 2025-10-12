@@ -1,0 +1,114 @@
+Here's a detailed script and outline for your SceneCraft addon promo video for BlenderMarket. The goal is to capture attention, highlight key features, and drive sales in a 60-90 second engaging video.
+
+🎬 SceneCraft Addon - Promo Video Script 🎬
+⏱️ Estimated Duration: 60-90 Seconds
+📌 Video Structure:
+✅ (0:00 - 0:05) Intro: What is SceneCraft?
+✅ (0:05 - 0:15) Showcase Stunning Features in Action
+✅ (0:15 - 0:45) Breakdown of Key Features with Short Demos
+✅ (0:45 - 1:10) Customization, Flexibility & Ease of Use
+✅ (1:10 - 1:25) Final Call-to-Action & Future Updates
+
+📜 Full Video Script
+(0:00 - 0:05) - Intro Scene
+🎥 [Text On Screen]
+🚀 "Introducing SceneCraft - The Ultimate Procedural Animation Addon for Blender!"
+
+🎵 (Energetic music starts)
+
+📌 [Footage]
+Quick montage of stunning procedural floor animations, force fields, bouncing effects, and randomized object movement.
+
+🎙️ [Narration / Text]
+"Create dynamic animations effortlessly in just a few clicks—no manual keyframing needed!"
+
+(0:05 - 0:15) - Features Showcase (Fast-Paced Preview)
+📌 [Footage]
+
+Wave animation of tiles collapsing in sequence 🌊
+Bouncing objects falling and reacting to surfaces 🎾
+Objects moving along a dynamic curve path 🌀
+Force fields pushing objects in real-time ⚡
+Material transitions and particle trails in motion 🎨
+🎙️ [Narration / Text]
+"From architectural destruction to mesmerizing motion graphics, SceneCraft brings your ideas to life!"
+
+(0:15 - 0:45) - Key Features Breakdown
+📌 [Footage] (Each feature has a short 5-7 second demo)
+
+1️⃣ Procedural Floor Animation System 🏗️
+
+Showcase wave, spiral, and randomized tile falls.
+🎙️ "Choose from 10+ unique presets for seamless floor animations."
+2️⃣ Dynamic Bouncing Effect 🎾
+
+Demonstrate falling objects bouncing naturally.
+🎙️ "Control bounce intensity for ultra-realistic motion!"
+3️⃣ Curve-Based Animations 🌀
+
+Show an object following a generated curve.
+🎙️ "Auto-generate movement paths for smooth object animations!"
+4️⃣ Randomization & Physics Integration 🎲
+
+Display randomized object movement and force field interactions.
+🎙️ "Add natural chaos and motion physics with a single click!"
+5️⃣ Dynamic Materials & Particles 🎨
+
+Show color/material transitions and particle trails.
+🎙️ "Enhance animations with real-time material shifts and motion effects!"
+(0:45 - 1:10) - Customization & Workflow
+📌 [Footage]
+
+Blender UI showing the SceneCraft panel & easy settings.
+Adjusting fall speed, delay, bounce intensity, and materials.
+Before & After comparison of a static vs. animated scene.
+🎙️ "Simple, intuitive controls with limitless customization! Works seamlessly with Eevee and Cycles."
+
+(1:10 - 1:25) - Final Call-to-Action
+📌 [Footage]
+
+Final shot of a fully animated scene.
+SceneCraft logo with BlenderMarket link.
+🎙️ "Supercharge your Blender animations with SceneCraft—available now!"
+
+🛒 (Text on screen) "Get SceneCraft Today! Available on BlenderMarket"
+
+🎥 (Closing Scene: Future Updates Teaser)
+🎙️ "Coming Soon: Collision-Based Sound, More Presets, and Enhanced Geometry Nodes!"
+
+🎨 Visual Assets Needed for the Video
+✅ GIFs & Short Clips
+
+Procedural floor animations
+Object bouncing comparison (with and without bounce)
+Dynamic curve path animation
+Randomized falling objects
+Force fields pushing objects
+Material transitions in motion
+✅ Static Images
+
+SceneCraft UI in Blender
+Before & After shot of a static vs. animated scene
+✅ Final Logo & Call-to-Action Scene
+
+🎥 Additional Tutorial Videos to Include on BlenderMarket
+Besides the promo video, you should also add detailed tutorials:
+
+1️⃣ Getting Started (2-3 min)
+🎬 "How to Install & Setup SceneCraft in Blender"
+✅ Installing the addon, enabling SceneCraft, UI overview
+
+2️⃣ Floor Animation Basics (5 min)
+🎬 "Creating Procedural Falling Tiles in Blender"
+✅ Using the presets, adjusting speed, adding randomization
+
+3️⃣ Advanced Features (5-7 min)
+🎬 "Using Force Fields, Bouncing Effects & Curves"
+✅ Controlling force fields, adding curve-based motion
+
+Next Steps
+✅ Create video clips & GIFs for each feature
+✅ Record short Blender tutorials for installation & use
+✅ Edit the promo video using a mix of demos, text overlays, and narration
+
+🎥 Would you like a more detailed script for any of the tutorial videos? 🚀
