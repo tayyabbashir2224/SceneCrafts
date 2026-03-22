@@ -10,6 +10,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+# SceneCraft/panels/camera_light_panel.py
 import bpy
 
 
@@ -32,9 +33,39 @@ class CameraLightAnimationsPanel(bpy.types.Panel):
         if props.show_cam:
             camera_props = scene.camera_animation_props
             layout.prop(camera_props, "camera_preset")
+            
+            # Show stopping distance for the FAST_SLOW and DOLLY preset
+            if camera_props.camera_preset in {'FAST_SLOW', 'DOLLY', 'POV_WALK'}:
+                layout.prop(camera_props, "stopping_distance", text="Stop Distance")
+                
+            # Show Handheld Settings
+            if camera_props.camera_preset == 'HANDHELD':
+                layout.prop(camera_props, "handheld_scale")
+                layout.prop(camera_props, "handheld_amp")
+                
+            # Show Crane Settings
+            if camera_props.camera_preset == 'CRANE':
+                layout.prop(camera_props, "crane_height")
+                
+            # Show POV Walk Settings
+            if camera_props.camera_preset == 'POV_WALK':
+                layout.prop(camera_props, "walk_speed")
+                layout.prop(camera_props, "walk_intensity")
+                
+            # Show Focus Breathing Settings
+            if camera_props.camera_preset == 'FOCUS_BREATHING':
+                layout.prop(camera_props, "focus_distance_start")
+                layout.prop(camera_props, "focus_distance_end")
+                layout.prop(camera_props, "breathing_intensity")
+
             layout.prop(camera_props, "start_frame")
             layout.prop(camera_props, "end_frame")
-            layout.prop(camera_props, "target_object")
+            
+            # Show target object for relevant presets if not already shown
+            presets_with_target = {'PAN', 'ORBIT', 'FOCUS', 'FAST_SLOW', 'CRANE', 'POV_WALK'}
+            if camera_props.camera_preset in presets_with_target:
+                 layout.prop(camera_props, "target_object")
+
             layout.operator("scenecraft.apply_camera_animation", text="Apply Camera Animation")
 
         # Separator

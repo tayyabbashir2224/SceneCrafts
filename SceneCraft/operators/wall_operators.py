@@ -446,7 +446,18 @@ class OBJECT_OT_Wipe_Walls(BaseWallOperatorExtended):
 class BasePresetOperator(BaseWallOperator):
     """Base class for preset wall animation operators"""
     
+    node_group_prefix = ""
+    preset_name = ""
+    direction_prop = ""
+    start_frame_prop = ""
+    end_frame_prop = ""
+    
+    def get_properties(self, context):
+        """Placeholder for getting the correct property group"""
+        return None 
+    
     def execute(self, context):
+        empty = None
         try:
             if not self.validate_scene(context):
                 return {'CANCELLED'}
@@ -473,7 +484,6 @@ class BasePresetOperator(BaseWallOperator):
             self.cleanup(empty if 'empty' in locals() else None)
             return {'CANCELLED'}
 
-    # Shared helper methods
     def validate_scene(self, context):
         """Base validation logic"""
         if not hasattr(context.scene, self.direction_prop):
@@ -561,18 +571,16 @@ class BasePresetOperator(BaseWallOperator):
     def setup_geometry_nodes(self, context, collection, empty, center, prefix, preset_name):
         """Setup geometry nodes modifier"""
         direction = getattr(context.scene, self.direction_prop)
-        dimensions = collection.objects[0].dimensions  # Approximation
+        mesh_obj = next((obj for obj in collection.objects if obj.type == 'MESH'), None)
+        dimensions = mesh_obj.dimensions if mesh_obj else Vector((1,1,1))
         
-        # Determine node group suffix
         suffix = self.get_node_group_suffix(direction, dimensions)
-        node_group_name = f"{prefix}_{suffix}"
+        node_group_name = f"{prefix} {suffix}"
         
-        # Append node group
         node_group = self.append_node_group(node_group_name)
         if not node_group:
             raise ValueError(f"Failed to load node group: {node_group_name}")
             
-        # Create preset object
         preset_obj = self.create_preset_object(center, preset_name)
         self.add_geometry_node_modifier(
             preset_obj, 
@@ -593,9 +601,9 @@ class BasePresetOperator(BaseWallOperator):
         
         try:
             with bpy.data.libraries.load(filepath) as (data_from, data_to):
-                data_to.node_groups = [name] if name in data_from.node_groups else []
+                data_to.node_groups = [g for g in data_from.node_groups if g.startswith(name)] 
                 
-            return bpy.data.node_groups.get(name)
+            return bpy.data.node_groups.get(name) or bpy.data.node_groups.get(data_to.node_groups[0])
         except Exception as e:
             self.report({'ERROR'}, f"Asset load failed: {str(e)}")
             return None
@@ -622,3 +630,35 @@ class BasePresetOperator(BaseWallOperator):
         """Remove temporary objects"""
         if empty and empty.name in bpy.data.objects:
             bpy.data.objects.remove(empty, do_unlink=True)
+
+class OBJECT_OT_Pop_In_Walls(BasePresetOperator):
+    bl_idname = "object.pop_in_walls"
+    bl_label = "Pop In Wall Tiles"
+    node_group_prefix = "NTPop In Walls"
+    preset_name = "Pop_In_Walls_Preset"
+    direction_prop = "pop_w_direction_xyz"
+    start_frame_prop = "pop_w_start_frame"
+    end_frame_prop = "pop_w_end_frame"
+
+    def get_properties(self, context):
+        return context.scene.pop_in_walls
+
+class OBJECT_OT_Rotate_In_Walls(BasePresetOperator):
+    bl_idname = "object.rotate_in_walls"
+    bl_label = "Rotate In Wall Tiles"
+    node_group_prefix = "NTRotate Walls"
+    preset_name = "Rotate_In_Walls_Preset"
+    direction_prop = "rotate_w_direction_xyz"
+    start_frame_prop = "rotate_w_start_frame"
+    end_frame_prop = "rotate_w_end_frame"
+
+    def get_properties(self, context):
+        return context.scene.rotate_in_walls
+
+wall_operators_classes = (
+    OBJECT_OT_Bend_Walls,
+    SimpleOperator_Roll_Walls,
+    OBJECT_OT_Wipe_Walls,
+    OBJECT_OT_Pop_In_Walls,
+    OBJECT_OT_Rotate_In_Walls,
+)

@@ -10,13 +10,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+# properties.py
 import bpy
-
-
-
-
-
-
 
 class CameraAnimationProperties(bpy.types.PropertyGroup):
     # Preset Dropdown
@@ -28,11 +23,17 @@ class CameraAnimationProperties(bpy.types.PropertyGroup):
             ('PAN', 'Pan/Orbit', 'Rotate the camera around a target'),
             ('FOCUS', 'Rack Focus', 'Change focus distance for depth of field'),
             ('SHAKE', 'Camera Shake', 'Simulate shaky camera movements'),
+            ('HANDHELD', 'Handheld (Cinematic)', 'Smooth, organic handheld motion using Perlin noise'),
+            ('CRANE', 'Crane Shot', 'Vertical sweeping camera movement'),
+            ('POV_WALK', 'POV Walk', 'Simulate a person walking (Head Bob)'),
+            ('FOCUS_BREATHING', 'Focus Breathing', 'Simulate lens breathing during focus pull'),
+            ('WHIP_PAN', 'Whip Pan', 'Fast, blurred rotation transition'), # NEW
             ('FLY_THROUGH', 'Fly Through', 'Move the camera along a path'),
             ('SPIRAL', 'Spiral Motion', 'Animate the camera in a spiral path'),
             ('ORBIT', 'Orbit', 'Orbit around a selected object'),
             ('DOLLY_ZOOM', 'Dolly Zoom', 'Create a Vertigo effect'),
             ('MULTI_SWITCH', 'Multi-Camera Switch', 'Switch between multiple cameras'),
+            ('FAST_SLOW', 'Fast to Slow', 'Cinematic deceleration towards a target'),
         ],
         default='DOLLY'
     )
@@ -55,6 +56,70 @@ class CameraAnimationProperties(bpy.types.PropertyGroup):
         name="Target Object",
         description="Object for camera to track or orbit around"
     )
+    
+    # Stopping Distance (Fast/Slow & Dolly & POV Walk)
+    stopping_distance: bpy.props.FloatProperty(
+        name="Stopping Distance",
+        default=2.0,
+        min=0.0,
+        description="Distance to stop before reaching the target object"
+    )
+
+    # --- PROPERTIES FOR MODERN FEATURES ---
+    
+    # Whip Pan Settings
+    whip_pan_angle: bpy.props.FloatProperty(
+        name="Pan Angle",
+        default=90.0,
+        description="Rotation angle for manual whip pan (if no target selected)"
+    )
+
+    # POV Walk Settings
+    walk_speed: bpy.props.FloatProperty(
+        name="Step Speed",
+        default=10.0,
+        min=0.1,
+        description="Speed of steps (Frequency of head bob)"
+    )
+    walk_intensity: bpy.props.FloatProperty(
+        name="Bob Intensity",
+        default=0.1,
+        min=0.0,
+        max=2.0,
+        description="Height of the head bob"
+    )
+
+    # Focus Breathing Settings
+    breathing_intensity: bpy.props.FloatProperty(
+        name="Breathing Amount",
+        default=2.0,
+        min=0.0,
+        max=50.0,
+        description="Amount of focal length change during focus pull"
+    )
+
+    # Handheld Settings
+    handheld_scale: bpy.props.FloatProperty(
+        name="Motion Scale",
+        default=0.5,
+        min=0.01,
+        max=5.0,
+        description="Speed/Frequency of the handheld sway (Lower is smoother)"
+    )
+    handheld_amp: bpy.props.FloatProperty(
+        name="Motion Strength",
+        default=0.2,
+        min=0.0,
+        max=5.0,
+        description="Intensity of the handheld movement"
+    )
+
+    # Crane Settings
+    crane_height: bpy.props.FloatProperty(
+        name="Crane Height",
+        default=5.0,
+        description="Vertical distance for the crane shot"
+    )
 
     # Focus Distance for Rack Focus
     focus_distance_start: bpy.props.FloatProperty(
@@ -70,7 +135,7 @@ class CameraAnimationProperties(bpy.types.PropertyGroup):
         description="End focus distance for rack focus animation"
     )
 
-    # Shake Intensity
+    # Shake Intensity (Old Shake)
     shake_intensity: bpy.props.FloatProperty(
         name="Shake Intensity",
         default=0.1,
@@ -114,9 +179,6 @@ class CameraAnimationProperties(bpy.types.PropertyGroup):
         description="Frame interval to switch between cameras"
     )
 
-
-
-
 class LightAnimationProperties(bpy.types.PropertyGroup):
     light_preset: bpy.props.EnumProperty(
         name="Preset",
@@ -134,6 +196,7 @@ class LightAnimationProperties(bpy.types.PropertyGroup):
             ('SWEEP', "Sweep Motion", ""),
             ('SPOTLIGHT_BEAM', "Spotlight Beam", ""),
             ('COLOR_GRADIENT', "Color Gradient", ""),            
+            ('SWITCH', "Switch", "Switch Light On/Off"),
         ],
         default='FLICKER'
     )
@@ -165,13 +228,12 @@ class LightAnimationProperties(bpy.types.PropertyGroup):
     end_frame: bpy.props.IntProperty(name="End Frame", default=50, min=1)
     target_object: bpy.props.PointerProperty(type=bpy.types.Object, name="Target Object")
 
-    # Add flicker_speed property
     flicker_speed: bpy.props.FloatProperty(
         name="Flicker Speed",
         description="Speed of the flickering effect",
-        default=1.0,  # Set a suitable default value
-        min=0.1,      # Minimum value
-        max=10.0      # Maximum value
+        default=1.0,
+        min=0.1,
+        max=10.0
     )
     pulse_speed: bpy.props.FloatProperty(
         name="Pulse Speed",
@@ -190,12 +252,19 @@ class LightAnimationProperties(bpy.types.PropertyGroup):
         size=2,
         default=(50.0, 200.0)
     )
-
-    target_object: bpy.props.PointerProperty(
-        name="Target Object",
-        type=bpy.types.Object
+    
+    collection_name: bpy.props.StringProperty(
+        name="Collection",
+        description="Target collection for switching lights",
+        default=""
     )
-
+    
+    switch_speed: bpy.props.IntProperty(
+        name="Switch Speed",
+        description="Frames between switches",
+        default=10,
+        min=1
+    )
 
 class AnimationLayer(bpy.types.PropertyGroup):
     layer_name: bpy.props.StringProperty(name="Layer Name", default="New Layer")
@@ -212,7 +281,6 @@ class AnimationLayer(bpy.types.PropertyGroup):
     start_frame: bpy.props.IntProperty(name="Start Frame", default=1, min=1)
     end_frame: bpy.props.IntProperty(name="End Frame", default=20, min=1)
 
-
 class AnimationLayerProperties(bpy.types.PropertyGroup):
     active_layer_index: bpy.props.IntProperty(
         name="Active Layer Index",
@@ -220,7 +288,6 @@ class AnimationLayerProperties(bpy.types.PropertyGroup):
         min=0,
         description="Index of the currently active animation layer"
     )
-
 
 class PresetAnimationProperties(bpy.types.PropertyGroup):
     selected_preset: bpy.props.EnumProperty(
@@ -274,109 +341,47 @@ class PresetAnimationProperties(bpy.types.PropertyGroup):
         min=1
     )
 
-
 class SimpleOperatorProperties(bpy.types.PropertyGroup):
-
     start_frame: bpy.props.IntProperty(
         name="Start Frame",
         description="Reversing the frame range will animate out instead of in.",
         default=1,
         min=1,
     )
-    
     end_frame: bpy.props.IntProperty(
         name="End Frame",
         description="Reversing the frame range will animate out instead of in.",
         default=30,
         min=1,
     )
-    show_transform: bpy.props.BoolProperty(
-        name="Show Transform",
-        default=False,
-    )    
-    show_scale: bpy.props.BoolProperty(
-        name="Scale In/Out:",
-        default=False,
-    )
-    show_fall: bpy.props.BoolProperty(
-        name="Fall Down",
-        default=False,
-    )
-    show_spiral: bpy.props.BoolProperty(
-        name="Spiral In/Out",
-        default=False,
-    )
-    show_rotate: bpy.props.BoolProperty(
-        name="Rotate In/Out",
-        default=False,
-    )
-    show_popup: bpy.props.BoolProperty(
-        name="Pop Up",
-        default=False,
-    )
-    show_wallbend: bpy.props.BoolProperty(
-        name="Bend Walls In/Out",
-        default=False,
-    )
-    show_wallroll: bpy.props.BoolProperty(
-        name="Roll Walls In/Out",
-        default=False,
-    )
-    show_wallwipe: bpy.props.BoolProperty(
-        name="Wipe Walls In/Out",
-        default=False,
-    )
-    show_wallpop: bpy.props.BoolProperty(
-        name="Pop In Wall Tiles",
-        default=False,
-    )
-    show_wallrotate: bpy.props.BoolProperty(
-        name="Rotate In Wall Tiles",
-        default=False,
-    )
-    show_tilepopfloor: bpy.props.BoolProperty(
-        name="Floor Tiles Pop In",
-        default=False,
-    )
-    show_tilefallfloor: bpy.props.BoolProperty(
-        name="Floor Tiles Fall Down",
-        default=False,
-    )
-    show_wipefloor: bpy.props.BoolProperty(
-        name="Wipe Floors In/Out",
-        default=False,
-    )
-    show_rollfloor: bpy.props.BoolProperty(
-        name="Roll Floor In/Out",
-        default=False,
-    )
-    show_bendfloor: bpy.props.BoolProperty(
-        name="Bend Floor In/Out",
-        default=False,
-    )
-    show_uniobj: bpy.props.BoolProperty(
-        name="Uniform Objects Animation",
-        default=False,
-    )
-    show_ranobj: bpy.props.BoolProperty(
-        name="Random Objects Animation",
-        default=False,
-    )
-    show_cam: bpy.props.BoolProperty(
-        name="Camera Animation",
-        default=False,
-    )
-    show_light: bpy.props.BoolProperty(
-        name="Light Animation",
-        default=False,
-    )    
+    show_transform: bpy.props.BoolProperty(name="Show Transform", default=False)    
+    show_scale: bpy.props.BoolProperty(name="Scale In/Out:", default=False)
+    show_fall: bpy.props.BoolProperty(name="Fall Down", default=False)
+    show_spiral: bpy.props.BoolProperty(name="Spiral In/Out", default=False)
+    show_rotate: bpy.props.BoolProperty(name="Rotate In/Out", default=False)
+    show_popup: bpy.props.BoolProperty(name="Pop Up", default=False)
+    show_wallbend: bpy.props.BoolProperty(name="Bend Walls In/Out", default=False)
+    show_wallroll: bpy.props.BoolProperty(name="Roll Walls In/Out", default=False)
+    show_wallwipe: bpy.props.BoolProperty(name="Wipe Walls In/Out", default=False)
+    show_wallpop: bpy.props.BoolProperty(name="Pop In Wall Tiles", default=False)
+    show_wallrotate: bpy.props.BoolProperty(name="Rotate In Wall Tiles", default=False)
+    show_tilepopfloor: bpy.props.BoolProperty(name="Floor Tiles Pop In", default=False)
+    show_tilefallfloor: bpy.props.BoolProperty(name="Floor Tiles Fall Down", default=False)
+    show_wipefloor: bpy.props.BoolProperty(name="Wipe Floors In/Out", default=False)
+    show_rollfloor: bpy.props.BoolProperty(name="Roll Floor In/Out", default=False)
+    show_bendfloor: bpy.props.BoolProperty(name="Bend Floor In/Out", default=False)
+    show_uniobj: bpy.props.BoolProperty(name="Uniform Objects Animation", default=False)
+    show_ranobj: bpy.props.BoolProperty(name="Random Objects Animation", default=False)
+    show_cam: bpy.props.BoolProperty(name="Camera Animation", default=False)
+    show_light: bpy.props.BoolProperty(name="Light Animation", default=False)    
+    
     spiral_direction_items = [
         ('X', 'X', 'X Direction'),
         ('Y', 'Y', 'Y Direction'),
         ('Z', 'Z', 'Z Direction'),
     ]
 
-    spiral_direction: bpy.props.StringProperty(
+    spiral_direction: bpy.props.EnumProperty(
         items=spiral_direction_items,
         name="Spiral Direction",
         description="Choose the spiral direction",
@@ -405,18 +410,17 @@ class SimpleOperatorProperties(bpy.types.PropertyGroup):
     )
     
     spiral_angle: bpy.props.FloatProperty(
-    name="Spiral Angle",
-    description="Rotation angle for the spiral",
-    default=270.0,
+        name="Spiral Angle",
+        description="Rotation angle for the spiral",
+        default=270.0,
     )
     
     rotate_angle: bpy.props.FloatProperty(
-    name="Rotate Angle",
-    description="Rotation angle",
-    default=180.0,
-    min=0.0,
+        name="Rotate Angle",
+        description="Rotation angle",
+        default=180.0,
+        min=0.0,
     )
-    
     
     origin_point_items = [
         ('BOTTOM', 'Bottom', 'Set origion point to bottom center'),
@@ -429,48 +433,18 @@ class SimpleOperatorProperties(bpy.types.PropertyGroup):
         description="Choose the origin point of the object",
         default='BOTTOM'
     )
-    
-
-    
-    
-    
 
 class Rotate_In_WallsOperatorProperties(bpy.types.PropertyGroup):
-    collection_name: bpy.props.StringProperty(
-        name="Collection",
-        description="Choose Collection",
-    )
-    
-    
-    empty_name: bpy.props.StringProperty(
-        name="Empty",
-    )
-    
+    collection_name: bpy.props.StringProperty(name="Collection", description="Choose Collection")
+    empty_name: bpy.props.StringProperty(name="Empty")
 
 class Pop_In_WallsOperatorProperties(bpy.types.PropertyGroup):
-    collection_name: bpy.props.StringProperty(
-        name="Collection",
-        description="Choose Collection",
-    )
-    
-    
-    empty_name: bpy.props.StringProperty(
-        name="Empty",
-    )
-    
+    collection_name: bpy.props.StringProperty(name="Collection", description="Choose Collection")
+    empty_name: bpy.props.StringProperty(name="Empty")
 
-    
 class Fall_Down_TilesOperatorProperties(bpy.types.PropertyGroup):
-    collection_name: bpy.props.StringProperty(
-        name="Collection",
-        description="Choose Collection",
-    )
-    
-    
-    empty_name: bpy.props.StringProperty(
-        name="Empty",
-    )
-    
+    collection_name: bpy.props.StringProperty(name="Collection", description="Choose Collection")
+    empty_name: bpy.props.StringProperty(name="Empty")
     fade_in_value: bpy.props.FloatProperty(
         name="Fade In",
         default=2.0,
@@ -478,24 +452,10 @@ class Fall_Down_TilesOperatorProperties(bpy.types.PropertyGroup):
         max=10000.0,
         description="Animation input value for the geometry node",
     )
-    
-
-
 
 class Pop_In_FloorsOperatorProperties(bpy.types.PropertyGroup):
-    collection_name: bpy.props.StringProperty(
-        name="Collection",
-        description="Choose Collection",
-    )
-    
-    
-    empty_name: bpy.props.StringProperty(
-        name="Empty",
-    )
-    
-    
-    
-    
+    collection_name: bpy.props.StringProperty(name="Collection", description="Choose Collection")
+    empty_name: bpy.props.StringProperty(name="Empty")
 
 class CurveOperatorProperties(bpy.types.PropertyGroup):
     direction_items = [
@@ -514,7 +474,6 @@ class CurveOperatorProperties(bpy.types.PropertyGroup):
         default='X'
     )
     
-    
     start_frame: bpy.props.IntProperty(
         name="Start Frame",
         description="Reversing the frame range will animate out instead of in",
@@ -529,21 +488,12 @@ class CurveOperatorProperties(bpy.types.PropertyGroup):
         min=1,
     )
     
-    
     curve_scale: bpy.props.FloatProperty(
         name="Curve Scale",
         description="Scale factor for the curve",
         default=1,
         min=0.1,  
     )
-    
-    
-
-
-    
-    
-    
-
 
 class CustomProperties(bpy.types.PropertyGroup):
     active_panel: bpy.props.EnumProperty(
@@ -557,166 +507,43 @@ class CustomProperties(bpy.types.PropertyGroup):
         ],
         default="Object_Transforms"
     )
-    
-    
-    
-    
-    
-    
+
 class UniformObjectsAnimtionProperties(bpy.types.PropertyGroup):
-    
-    collection_name: bpy.props.StringProperty(
-        name="Collection",
-        description="Choose Collection",
-    )
-    
-    animate_from_z: bpy.props.FloatProperty(
-        name="Animate From Z",
-        description="Set animation distance from Z direction",
-        default=0.0,
-    )
-    
-    animate_from_y: bpy.props.FloatProperty(
-        name="Animate From Y",
-        description="Set animation distance from Y direction",
-        default=0.0,
-    )
-    
-    animate_from_x: bpy.props.FloatProperty(
-        name="Animate From X",
-        description="Set animation distance from X direction",
-        default=0.0,
-    )
-    
-    
-    rotation_x: bpy.props.FloatProperty(
-        name="Rotation X",
-        description="Set Rotation X",
-        default=0.0,
-        subtype='ANGLE',
-    )
-    
-    rotation_y: bpy.props.FloatProperty(
-        name="Rotation Y",
-        description="Set Rotation Y",
-        default=0.0,
-        subtype='ANGLE',
-    )
-    
-    rotation_z: bpy.props.FloatProperty(
-        name="Rotation Z",
-        description="Set Rotation Z",
-        default=0.0,
-        subtype='ANGLE',
-    )
-    
-    
+    collection_name: bpy.props.StringProperty(name="Collection", description="Choose Collection")
+    animate_from_z: bpy.props.FloatProperty(name="Animate From Z", default=0.0)
+    animate_from_y: bpy.props.FloatProperty(name="Animate From Y", default=0.0)
+    animate_from_x: bpy.props.FloatProperty(name="Animate From X", default=0.0)
+    rotation_x: bpy.props.FloatProperty(name="Rotation X", default=0.0, subtype='ANGLE')
+    rotation_y: bpy.props.FloatProperty(name="Rotation Y", default=0.0, subtype='ANGLE')
+    rotation_z: bpy.props.FloatProperty(name="Rotation Z", default=0.0, subtype='ANGLE')
+
 class RandomObjectsAnimtionProperties(bpy.types.PropertyGroup):
-    
-    collection_name: bpy.props.StringProperty(
-        name="Collection",
-        description="Choose Collection",
-    )
-    
-    min_z_distance: bpy.props.FloatProperty(
-        name="Min Z Distance",
-        description="Minimum Z distance",
-        default=0.0,
-    )
+    collection_name: bpy.props.StringProperty(name="Collection", description="Choose Collection")
+    min_z_distance: bpy.props.FloatProperty(name="Min Z Distance", default=0.0)
+    max_z_distance: bpy.props.FloatProperty(name="Max Z Distance", default=0.0)
+    min_y_distance: bpy.props.FloatProperty(name="Min Y Distance", default=0.0)
+    max_y_distance: bpy.props.FloatProperty(name="Max Y Distance", default=0.0)
+    min_x_distance: bpy.props.FloatProperty(name="Min X Distance", default=0.0)
+    max_x_distance: bpy.props.FloatProperty(name="Max X Distance", default=0.0)
+    min_x_rotation: bpy.props.FloatProperty(name="Min X Rotation", default=0.0, subtype='ANGLE')
+    max_x_rotation: bpy.props.FloatProperty(name="Max X Rotation", default=0.0, subtype='ANGLE')
+    min_y_rotation: bpy.props.FloatProperty(name="Min Y Rotation", default=0.0, subtype='ANGLE')
+    max_y_rotation: bpy.props.FloatProperty(name="Max Y Rotation", default=0.0, subtype='ANGLE')
+    min_z_rotation: bpy.props.FloatProperty(name="Min Z Rotation", default=0.0, subtype='ANGLE')
+    max_z_rotation: bpy.props.FloatProperty(name="Max Z Rotation", default=0.0, subtype='ANGLE')
 
-    max_z_distance: bpy.props.FloatProperty(
-        name="Max Z Distance",
-        description="Maximum Z distance",
-        default=0.0,
-    )
-
-    min_y_distance: bpy.props.FloatProperty(
-        name="Min Y Distance",
-        description="Minimum Y distance",
-        default=0.0,
-    )
-
-    max_y_distance: bpy.props.FloatProperty(
-        name="Max Y Distance",
-        description="Maximum Y distance",
-        default=0.0,
-    )
-    
-    
-    min_x_distance: bpy.props.FloatProperty(
-        name="Min X Distance",
-        description="Minimum X distance",
-        default=0.0,
-    )
-
-    max_x_distance: bpy.props.FloatProperty(
-        name="Max X Distance",
-        description="Maximum X distance",
-        default=0.0,
-    )
-
-    min_x_rotation: bpy.props.FloatProperty(
-        name="Min X Rotation",
-        description="Minimum X rotation",
-        default=0.0,
-        subtype='ANGLE',
-    )
-
-    max_x_rotation: bpy.props.FloatProperty(
-        name="Max X Rotation",
-        description="Maximum X rotation",
-        default=0.0,
-        subtype='ANGLE',
-    )
-
-    min_y_rotation: bpy.props.FloatProperty(
-        name="Min Y Rotation",
-        description="Minimum Y rotation",
-        default=0.0,
-        subtype='ANGLE',
-    )
-
-    max_y_rotation: bpy.props.FloatProperty(
-        name="Max Y Rotation",
-        description="Maximum Y rotation",
-        default=0.0,
-        subtype='ANGLE',
-    )
-
-    min_z_rotation: bpy.props.FloatProperty(
-        name="Min Z Rotation",
-        description="Minimum Z rotation",
-        default=0.0,
-        subtype='ANGLE',
-    )
-
-    max_z_rotation: bpy.props.FloatProperty(
-        name="Max Z Rotation",
-        description="Maximum Z rotation",
-        default=0.0,
-        subtype='ANGLE',
-    )
-    
-    
-    
 def register_properties():
-
-
-
     bpy.utils.register_class(AnimationLayer)
     bpy.utils.register_class(AnimationLayerProperties)
     bpy.types.Scene.animation_layer_collection = bpy.props.CollectionProperty(type=AnimationLayer)
     bpy.types.Scene.animation_layer_props = bpy.props.PointerProperty(type=AnimationLayerProperties)
 
 def unregister_properties():
-
-
     del bpy.types.Scene.animation_layer_collection
     del bpy.types.Scene.animation_layer_props
     bpy.utils.unregister_class(AnimationLayerProperties)
     bpy.utils.unregister_class(AnimationLayer)    
 
-    
 __all__ = [
     "register_properties",
     "unregister_properties",

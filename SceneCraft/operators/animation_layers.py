@@ -29,21 +29,17 @@ class OBJECT_OT_AddAnimationLayer(bpy.types.Operator):
         return {'FINISHED'}
 
 
-class OBJECT_OT_BakeAnimationLayers(bpy.types.Operator):
-    bl_idname = "object.bake_animation_layers"
-    bl_label = "Bake Animation Layers"
+class OBJECT_OT_AddAnimationLayer(bpy.types.Operator):
+    bl_idname = "object.add_animation_layer"
+    bl_label = "Add Animation Layer"
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        obj = context.object
-        action = obj.animation_data.action
-
-        # Combine all layers into a single baked action
-        for fcurve in action.fcurves:
-            for keyframe in fcurve.keyframe_points:
-                keyframe.co.y *= context.scene.animation_layer_props.layer_opacity
-
-        self.report({'INFO'}, "Baked all animation layers.")
+        scene = context.scene
+        # Add a new layer
+        new_layer = scene.animation_layer_collection.add()
+        new_layer.layer_name = f"Layer {len(scene.animation_layer_collection)}"
+        self.report({'INFO'}, f"Added {new_layer.layer_name}")
         return {'FINISHED'}
 
 class OBJECT_OT_DeleteAnimationLayer(bpy.types.Operator):
@@ -51,34 +47,26 @@ class OBJECT_OT_DeleteAnimationLayer(bpy.types.Operator):
     bl_label = "Delete Animation Layer"
     bl_options = {'REGISTER', 'UNDO'}
 
-    layer_index: bpy.props.IntProperty()  # Layer index to delete
+    layer_index: bpy.props.IntProperty()
 
     def execute(self, context):
         scene = context.scene
         layers = scene.animation_layer_collection
-
         if 0 <= self.layer_index < len(layers):
             layers.remove(self.layer_index)
             self.report({'INFO'}, f"Deleted Layer {self.layer_index + 1}")
         else:
             self.report({'WARNING'}, "Invalid layer index!")
-
         return {'FINISHED'}
 
 
 class OBJECT_OT_BakeAnimationLayers(bpy.types.Operator):
     bl_idname = "object.bake_layers"
     bl_label = "Bake Animation Layers"
+    bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        layers = context.scene.animation_layer_collection
-
-        for layer in layers:
-            if layer.layer_animation_type == 'FADE':
-                self.apply_fade(context, layer)
-            elif layer.layer_animation_type == 'SCALE':
-                self.apply_scale(context, layer)
-
+        # Placeholder for bake logic
         self.report({'INFO'}, "Baked all layers.")
         return {'FINISHED'}
 

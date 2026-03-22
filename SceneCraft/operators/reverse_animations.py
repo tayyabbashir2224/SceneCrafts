@@ -14,13 +14,14 @@ import bpy
 
 class OBJECT_OT_ReverseAnimation(bpy.types.Operator):
     bl_label = "Reverse Animation"
-    bl_idname = "object.Reverse_Animation"
+    bl_idname = "object.reverse_animation" # Corrected lowercase ID
     bl_description = "Reverse keyframes Of Selected Objects to Animate Out"
 
     def execute(self, context):
         # Check if there are selected objects
         if not bpy.context.selected_objects:
-            raise RuntimeError("No objects are selected. Please select an object and try again.")
+            self.report({'WARNING'}, "No objects selected.")
+            return {'CANCELLED'}
 
         # Store the current frame
         current_frame = bpy.context.scene.frame_current
@@ -35,8 +36,9 @@ class OBJECT_OT_ReverseAnimation(bpy.types.Operator):
                 # Store the action if it exists
                 action = selected_object.animation_data.action
 
-                # If the selected object doesn't have an action, skip to the next object
-                if not action:
+                # FIX: Check if action is valid AND if it has the 'fcurves' attribute
+                if not action or not hasattr(action, 'fcurves'):
+                    self.report({'WARNING'}, f"Object '{selected_object.name}' has no active Action or F-Curve data. Skipping.")
                     continue
 
                 # Iterate over all fcurves in the action

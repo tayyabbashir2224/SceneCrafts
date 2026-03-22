@@ -35,9 +35,9 @@ class AnimationLayersPanel(bpy.types.Panel):
 
             # Delete button
             row = box.row()
-            row.operator("object.delete_layer", text="Delete").layer_index = i
+            op = row.operator("object.delete_animation_layer", text="Delete")
+            op.layer_index = i
 
         # Add layer button
-        layout.operator("object.add_layer", text="Add Layer")
+        layout.operator("object.add_animation_layer", text="Add Layer")
         layout.operator("object.bake_layers", text="Bake All Layers")
-

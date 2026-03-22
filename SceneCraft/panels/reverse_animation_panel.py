@@ -21,12 +21,8 @@ class ReverseAnimationPanel(bpy.types.Panel):
 
     def draw(self, context):
             layout = self.layout
-        
-            props = context.scene.simple_operator_props
-        
-
-             
             scene = context.scene
+            
             row = layout.row()
             row.label(text="Animate Selected Objects Out:")
             row = layout.row()
@@ -37,9 +33,5 @@ class ReverseAnimationPanel(bpy.types.Panel):
 
             row = layout.row()
             row.scale_y = 1.7
-            row.operator("object.Reverse_Animation", text="Reverse Animation")
-            
-            
-            
-            
-        
+            # Updated to lowercase ID
+            row.operator("object.reverse_animation", text="Reverse Animation")
